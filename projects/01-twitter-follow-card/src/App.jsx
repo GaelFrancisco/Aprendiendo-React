@@ -1,15 +1,39 @@
+import { useState } from 'react'
 import './App.css'
-import { TwitterFollowCard } from './TwitterFollowCard'
+import { TwitterFollowCard } from './TwitterFollowCard.jsx'
+
+const userName = [
+    {
+        userName: 'midudev',
+        name: 'Miguel Angel Duran',
+        isFollowing: true
+    },
+    {
+        userName: 'pheralb',
+        name: 'Pablo Hernandez',
+        isFollowing: false
+    },
+    {
+        userName: 'MoureDev',
+        name: 'Brais Moure',
+        isFollowing: true
+    }
+]
 
 export function App () {
     return (
-        // with or without fragments
-        // <React.Fragment>
         <section className="App">
-            <TwitterFollowCard userName="midudev" name="Miguel Angel Duran" />
-            <TwitterFollowCard userName="pheralb" name="Pablo Hernandez" />
-            <TwitterFollowCard userName="MoureDev" name="Brais Moure" />
+            {
+                userName.map(({ userName, name, isFollowing }) => (
+                    <TwitterFollowCard
+                        key={userName}
+                        userName={userName}
+                        initialIsFollowing={isFollowing}
+                    >
+                        {name}
+                    </TwitterFollowCard>
+                ))
+            }
         </section>
     )
-    
 }
