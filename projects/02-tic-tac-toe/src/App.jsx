@@ -5,16 +5,19 @@ import { Square } from './components/Square.jsx'
 import { TURNS } from './constants.js'
 import { checkWinnerFrom, checkEndGame } from './logic/board.js'
 import { WinnerModal } from './components/WinnerModal.jsx'
+import { saveGameStorage, resetGameStorage } from './logic/storage/index.js'
 
 function App() {
   const [board, setBoard] = useState(() => {
     const boardFromStorage = window.localStorage.getItem('board')
-    return boardFromStorage ? JSON.parse(boardFromStorage) : Array(9).fill(null)
+    if (boardFromStorage) return JSON.parse(boardFromStorage)
+    return Array(9).fill(null) // Initialize the board with 9 null values
 })
   const [turn, setTurn] = useState(() => {
     const turnFromStorage = window.localStorage.getItem('turn')
     return turnFromStorage ?? TURNS.X
   })
+
   const [winner, setWinner] = useState(null) // null means no winner yet, false means a draw
 
   const resetGame = () => {
@@ -22,8 +25,7 @@ function App() {
     setTurn(TURNS.X)
     setWinner(null)
 
-    window.localStorage.removeItem('board')
-    window.localStorage.removeItem('turn')
+    resetGameStorage() // Clear the local storage
   }
 
   const updateBoard = (index) => {
@@ -37,8 +39,10 @@ function App() {
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
     // save the new board state
-    window.localStorage.setItem('board', JSON.stringify(newBoard))
-    window.localStorage.setItem('turn', newTurn)
+    saveGameStorage({
+      board: newBoard,
+      turn: newTurn
+    })
     // Check for a winner
     const newWinner = checkWinnerFrom(newBoard)
     if (newWinner) {
