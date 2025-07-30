@@ -5,7 +5,7 @@ import { Square } from './components/Square.jsx'
 import { TURNS } from './constants.js'
 import { checkWinnerFrom, checkEndGame } from './logic/board.js'
 import { WinnerModal } from './components/WinnerModal.jsx'
-import { saveGameStorage, resetGameStorage } from './logic/storage/index.js'
+import { saveGameToStorage, resetGameStorage } from './logic/storage/index.js'
 
 function App() {
   const [board, setBoard] = useState(() => {
@@ -13,6 +13,7 @@ function App() {
     if (boardFromStorage) return JSON.parse(boardFromStorage)
     return Array(9).fill(null) // Initialize the board with 9 null values
 })
+
   const [turn, setTurn] = useState(() => {
     const turnFromStorage = window.localStorage.getItem('turn')
     return turnFromStorage ?? TURNS.X
@@ -39,7 +40,7 @@ function App() {
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
     // save the new board state
-    saveGameStorage({
+    saveGameToStorage({
       board: newBoard,
       turn: newTurn
     })
@@ -55,7 +56,7 @@ function App() {
 
   return (
     <main className='board'>
-      <h1>Tic Tac Toe</h1>
+      <h1 translate='no'>Tic Tac Toe</h1>
       <button onClick={resetGame}>Reset del juego</button>
       <section className='game'>
         {
