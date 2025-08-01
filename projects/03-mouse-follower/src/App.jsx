@@ -22,6 +22,7 @@ import { useEffect, useState } from "react"
     // when the component unmounts or when `enabled` changes
     // to prevent memory leaks and unnecessary event listeners
     return () => {
+      console.log('cleanup')
       window.removeEventListener('pointermove', handleMove)
     }
   }, [enabled])
