@@ -4,8 +4,9 @@ import { useEffect, useState } from "react"
     const [enabled, setEnabled] = useState(false)
     const [position, setPosition] = useState({ x: 0, y: 0 })
 
+    // pointer move event listener
     useEffect(() => {
-    console.log('effect', { enabled })
+    console.log('effect', [ enabled ])
 
     const handleMove = (event) => {
       const { clientX, clientY } = event
@@ -25,12 +26,21 @@ import { useEffect, useState } from "react"
     }
   }, [enabled])
 
+    // change body classname
+    useEffect(() => {
+      document.body.classList.toggle('no-cursor', enabled)
+      return () => {
+        document.body.classList.remove('no-cursor')
+      }
+    }, [enabled])
+
     return (
     <>
       <div 
         style={{
           position: 'absolute',
-          background: '#09f',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          border: '1px solid #fff',
           borderRadius: '50%',
           opacity: 0.8,
           pointerEvents: 'none',
