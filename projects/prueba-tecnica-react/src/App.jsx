@@ -1,40 +1,14 @@
-import { useEffect, useState } from 'react'
 import './App.css'
-
-const CAT_ENDPOINT_RANDOM_FACT = 'https://catfact.ninja/fact'
-// const CAT_ENDPOINT_IMAGE_URL = `https://cataas.com/cat/says/${threeFirstWords}$?fontSize=50&fontColor=red&json=true`
+import { useCatImage } from './hooks/useCatImage.js'
+import { useCatFact } from './hooks/useCatFact.js'
 
 export function App() {
-    const [fact, setFact] = useState()
-    const [imageUrl, setImageUrl] = useState()
-    const getRandomFact = () => {
-      fetch(CAT_ENDPOINT_RANDOM_FACT)
-        .then(res => res.json())
-        .then(data => {
-          const { fact } = data 
-          setFact(fact)
-        })
+  const { fact, refreshRandomFact } = useCatFact()
+    const { imageUrl } = useCatImage({ fact })
+
+    const handleClick = async () => {
+      refreshRandomFact()
     }
-    // Cargar un hecho aleatorio al iniciar la app
-    useEffect(getRandomFact, [])
-    // Cargar una imagen de gato al cambiar el hecho
-    useEffect(() => {
-      if (!fact) return
-
-      const threeFirstWords = fact.split(' ', 3).join(' ')
-      console.log(threeFirstWords)
-
-      fetch(`https://cataas.com/cat/says/${threeFirstWords}?fontSize=50&fontColor=red&json=true`)
-        .then(res => res.json())
-        .then(response => {
-          const { url } = response
-          setImageUrl(url)
-        })
-    }, [fact])
-
-  const handleClick = () => {
-    getRandomFact()
-  }
 
   return (
     <main>
